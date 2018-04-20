@@ -1,0 +1,16 @@
+FROM golang:1.10
+
+ENV GLIDE_VERSION v0.13.1
+
+RUN go get github.com/alecthomas/gometalinter \
+    && gometalinter --install --vendor \
+    && go get golang.org/x/tools/cmd/goimports \
+    && go get github.com/axw/gocov/gocov \
+    && go get github.com/t-yuki/gocov-xml \
+    && go get github.com/tebeka/go2xunit \
+    && curl -Lo /tmp/glide.tgz https://github.com/Masterminds/glide/releases/download/$GLIDE_VERSION/glide-$GLIDE_VERSION-linux-amd64.tar.gz \
+    && tar -C /usr/bin -xzf /tmp/glide.tgz --strip=1 linux-amd64/glide \
+    && rm /tmp/glide.tgz
+
+ENV CGO_ENABLED 0
+ENV GOPATH /go:/logrus-kafka-hook

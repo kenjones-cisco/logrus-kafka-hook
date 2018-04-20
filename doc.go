@@ -1,7 +1,4 @@
-# logkafka
-
-`import "github.com/kenjones-cisco/logrus-kafka-hook"`
-
+/*
 Package logkafka provides a Logrus Hook implementation for publishing log messages on a Kafka Topic.
 
 logkafka uses a builder pattern to configure the Hook. This provides simplicity and flexibility when configuring a Hook.
@@ -27,13 +24,12 @@ log.Debug("Hello World")
 Example of formatted message published to Kafka
 ```json
 {
-
-
-	"@timestamp": "2018-04-20T04:03:00Z",
-	"@version": "1",
-	"level": "info",
-	"message": "Hello World",
-	"type": "myappName"
-
+  "@timestamp": "2018-04-20T04:03:00Z",
+  "@version": "1",
+  "level": "info",
+  "message": "Hello World",
+  "type": "myappName"
 }
 ```
+*/
+package logkafka
