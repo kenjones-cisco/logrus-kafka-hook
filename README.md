@@ -1,5 +1,22 @@
 # logkafka
 
+## Status
+
+[![GoDoc][1]][2]
+[![GoCard][3]][4]
+[![coverage][5]][6]
+[![Build Status][7]][8]
+
+[1]: https://godoc.org/github.com/kenjones-cisco/logrus-kafka-hook?status.svg
+[2]: https://godoc.org/github.com/kenjones-cisco/logrus-kafka-hook
+[3]: https://goreportcard.com/badge/kenjones-cisco/logrus-kafka-hook
+[4]: https://goreportcard.com/report/github.com/kenjones-cisco/logrus-kafka-hook
+[5]: http://gocover.io/_badge/github.com/kenjones-cisco/logrus-kafka-hook
+[6]: http://gocover.io/github.com/kenjones-cisco/logrus-kafka-hook
+[7]: https://travis-ci.org/kenjones-cisco/logrus-kafka-hook.svg?branch=master
+[8]: https://travis-ci.org/kenjones-cisco/logrus-kafka-hook
+
+
 `import "github.com/kenjones-cisco/logrus-kafka-hook"`
 
 Package logkafka provides a Logrus Hook implementation for publishing log messages on a Kafka Topic.
@@ -25,6 +42,7 @@ log.Debug("Hello World")
 ```
 
 Example of formatted message published to Kafka
+
 ```json
 {
 
