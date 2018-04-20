@@ -66,6 +66,7 @@ help:
 local: | quiet
 	@$(eval DOCKERRUN= )
 	@$(eval DOCKERNOVENDOR= )
+	@mkdir -p tmp
 	@date > tmp/dev_image_id
 quiet: # this is silly but shuts up 'Nothing to be done for `local`'
 	@:
