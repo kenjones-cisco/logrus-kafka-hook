@@ -40,7 +40,8 @@ func releaseEntry(e *logrus.Entry) {
 // It has logrus.Formatter which formats the entry and logrus.Fields which
 // are added to the JSON message if not given in the entry data.
 //
-// **Note:** use the `DefaultFormatter` function to create a default StructuredFormatter.
+//		**Note:** use the `DefaultFormatter` function to create a default StructuredFormatter.
+//
 type StructuredFormatter struct {
 	logrus.Formatter
 	logrus.Fields
@@ -59,7 +60,8 @@ var (
 // "type" to "log" (unless set differently in `fields`),
 // "@timestamp" to the log time and "message" to the log message.
 //
-// **Note:** to set a different configuration use the `StructuredFormatter` structure.
+//		**Note:** to set a different configuration use the `StructuredFormatter` structure.
+//
 func DefaultFormatter(fields logrus.Fields) logrus.Formatter {
 	for k, v := range logFields {
 		if _, ok := fields[k]; !ok {
@@ -75,7 +77,8 @@ func DefaultFormatter(fields logrus.Fields) logrus.Formatter {
 
 // Format formats an entry to a structured format according to the given Formatter and Fields.
 //
-// **Note:** the given entry is copied and not changed during the formatting process.
+//		**Note:** the given entry is copied and not changed during the formatting process.
+//
 func (f StructuredFormatter) Format(e *logrus.Entry) ([]byte, error) {
 	ne := copyEntry(e, f.Fields)
 	dataBytes, err := f.Formatter.Format(ne)

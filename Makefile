@@ -77,7 +77,7 @@ clean:
 
 ## Same as clean but also removes cached dependencies.
 veryclean: clean
-	@rm -rf tmp .glide vendor
+	@rm -rf tmp vendor
 
 ## builds the dev container
 prepare: tmp/dev_image_id
@@ -92,11 +92,11 @@ tmp/dev_image_id: Dockerfile.dev
 # dependencies
 
 ## Install dependencies using glide if glide.yaml changed.
-vendor: tmp/glide-installed
-tmp/glide-installed: tmp/dev_image_id glide.yaml
+vendor: tmp/vendor-installed
+tmp/vendor-installed: tmp/dev_image_id glide.yaml
 	@mkdir -p vendor
 	${DOCKERRUN} glide install --skip-test --strip-vendor
-	@date > tmp/glide-installed
+	@date > tmp/vendor-installed
 	@chmod 644 glide.lock || :
 
 ## Update dependencies using glide.
@@ -125,7 +125,7 @@ debug:
 	@echo "$(DOCKERRUN)"
 
 ## Run code formatter.
-format: tmp/glide-installed
+format: tmp/vendor-installed
 	${DOCKERNOVENDOR} bash ./scripts/format.sh
 
 ## Run static code analysis (lint).
@@ -141,4 +141,4 @@ cover: check
 	@rm -rf cover/
 	@mkdir -p cover
 	${DOCKERRUN} bash ./scripts/cover.sh
-	@chmod 644 cover/coverage.html
+	@chmod 644 cover/coverage.html || :

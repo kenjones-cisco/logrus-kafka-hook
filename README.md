@@ -45,13 +45,10 @@ Example of formatted message published to Kafka
 
 ```json
 {
-
-
 	"@timestamp": "2018-04-20T04:03:00Z",
 	"@version": "1",
 	"level": "info",
 	"message": "Hello World",
 	"type": "myappName"
-
 }
 ```

@@ -20,9 +20,11 @@ type Hook struct {
 // New creates a new logrus hook for Kafka
 //
 // Defaults:
-// - Formatter: *logrus.TextFormatter*
-// - Levels: *logrus.AllLevels*
-// - Topic: *"logs"*
+//
+//		Formatter: *logrus.TextFormatter*
+//		Levels: *logrus.AllLevels*
+//		Topic: *"logs"*
+//
 func New() *Hook {
 	return &Hook{
 		formatter: new(logrus.TextFormatter),

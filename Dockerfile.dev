@@ -1,9 +1,8 @@
-FROM golang:1.10
+FROM golang:1.11
 
-ENV GLIDE_VERSION v0.13.1
+ENV GLIDE_VERSION v0.13.2
 
-RUN go get github.com/alecthomas/gometalinter \
-    && gometalinter --install --vendor \
+RUN go get github.com/golangci/golangci-lint/cmd/golangci-lint \
     && go get golang.org/x/tools/cmd/goimports \
     && go get github.com/axw/gocov/gocov \
     && go get github.com/t-yuki/gocov-xml \
