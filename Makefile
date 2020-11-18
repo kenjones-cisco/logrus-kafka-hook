@@ -31,19 +31,19 @@ endif
 DEV_IMAGE := ${PROJECT}_dev
 
 DOCKERRUN := docker run --rm \
-	-v ${ROOT}/vendor:/go/src \
-	-v ${ROOT}:/${PROJECT}/src/${IMPORT_PATH} \
-	-w /${PROJECT}/src/${IMPORT_PATH} \
+	-v ${ROOT}/.mod:/go/pkg/mod \
+	-v ${ROOT}:/usr/src/${PROJECT} \
+	-w /usr/src/${PROJECT} \
 	${DEV_IMAGE}
 
 DOCKERNOVENDOR := docker run --rm -i \
 	-e IMPORT_PATH="${IMPORT_PATH}" \
-	-v ${ROOT}:/${PROJECT}/src/${IMPORT_PATH} \
-	-w /${PROJECT}/src/${IMPORT_PATH} \
+	-v ${ROOT}:/usr/src/${PROJECT} \
+	-w /usr/src/${PROJECT} \
 	${DEV_IMAGE}
 
 
-.PHONY: help clean veryclean vendor dep-* format check test cover
+.PHONY: help clean veryclean vendor format check test cover
 
 ## display this help message
 help:
@@ -51,9 +51,7 @@ help:
 	@echo
 	@echo 'Usage:'
 	@echo '  ## Develop / Test Commands'
-	@echo '    vendor          Install dependencies using glide if glide.yaml changed.'
-	@echo '    dep-update      Update dependencies using glide.'
-	@echo '    dep-add         Add new dependencies to glide and install.'
+	@echo '    vendor          Install dependencies using go mod if go.mod changed.'
 	@echo '    format          Run code formatter.'
 	@echo '    check           Run static code analysis (lint).'
 	@echo '    test            Run tests on project.'
@@ -77,7 +75,7 @@ clean:
 
 ## Same as clean but also removes cached dependencies.
 veryclean: clean
-	@rm -rf tmp vendor
+	@rm -rf tmp vendor .mod
 
 ## builds the dev container
 prepare: tmp/dev_image_id
@@ -91,27 +89,13 @@ tmp/dev_image_id: Dockerfile.dev
 # ----------------------------------------------
 # dependencies
 
-## Install dependencies using glide if glide.yaml changed.
+## Install dependencies using go mod if go.mod changed.
 vendor: tmp/vendor-installed
-tmp/vendor-installed: tmp/dev_image_id glide.yaml
-	@mkdir -p vendor
-	${DOCKERRUN} glide install --skip-test --strip-vendor
+tmp/vendor-installed: tmp/dev_image_id go.mod
+	@mkdir -p .mod
+	${DOCKERRUN} go mod tidy
 	@date > tmp/vendor-installed
-	@chmod 644 glide.lock || :
-
-## Update dependencies using glide.
-dep-update: prepare
-	${DOCKERRUN} glide up --skip-test --strip-vendor
-	@chmod 644 glide.lock || :
-
-# usage DEP=github.com/owner/package make dep-add
-## Add new dependencies to glide and install.
-dep-add: prepare
-ifeq ($(strip $(DEP)),)
-	$(error "No dependency provided. Expected: DEP=<go import path>")
-endif
-	${DOCKERNOVENDOR} glide get --skip-test --strip-vendor ${DEP}
-	@chmod 644 glide.lock || :
+	@chmod 644 go.sum || :
 
 # ----------------------------------------------
 # develop and test
@@ -142,3 +126,8 @@ cover: check
 	@mkdir -p cover
 	${DOCKERRUN} bash ./scripts/cover.sh
 	@chmod 644 cover/coverage.html || :
+
+# usage: make adhoc RUNTHIS='command to run inside of dev container'
+# example: make adhoc RUNTHIS='which git'
+adhoc: prepare
+	@${DOCKERRUN} ${RUNTHIS}

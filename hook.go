@@ -1,7 +1,6 @@
 package logkafka
 
 import (
-	"errors"
 	"fmt"
 	"os"
 
@@ -9,7 +8,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// Hook represents a logrus hook for Kafka
+// Hook represents a logrus hook for Kafka.
 type Hook struct {
 	formatter logrus.Formatter
 	levels    []logrus.Level
@@ -17,7 +16,7 @@ type Hook struct {
 	topic     string
 }
 
-// New creates a new logrus hook for Kafka
+// New creates a new logrus hook for Kafka.
 //
 // Defaults:
 //
@@ -33,19 +32,21 @@ func New() *Hook {
 	}
 }
 
-// WithFormatter adds a formatter to the created Hook
+// WithFormatter adds a formatter to the created Hook.
 func (h *Hook) WithFormatter(formatter logrus.Formatter) *Hook {
 	h.formatter = formatter
+
 	return h
 }
 
-// WithLevels adds levels to the created Hook
+// WithLevels adds levels to the created Hook.
 func (h *Hook) WithLevels(levels []logrus.Level) *Hook {
 	h.levels = levels
+
 	return h
 }
 
-// WithProducer adds a producer to the created Hook
+// WithProducer adds a producer to the created Hook.
 func (h *Hook) WithProducer(producer sarama.AsyncProducer) *Hook {
 	h.producer = producer
 
@@ -60,18 +61,19 @@ func (h *Hook) WithProducer(producer sarama.AsyncProducer) *Hook {
 	return h
 }
 
-// WithTopic adds a topic to the created Hook
+// WithTopic adds a topic to the created Hook.
 func (h *Hook) WithTopic(topic string) *Hook {
 	h.topic = topic
+
 	return h
 }
 
-// Levels returns all log levels that are enabled for writing messages to Kafka
+// Levels returns all log levels that are enabled for writing messages to Kafka.
 func (h *Hook) Levels() []logrus.Level {
 	return h.levels
 }
 
-// Fire writes the entry as a message on Kafka
+// Fire writes the entry as a message on Kafka.
 func (h *Hook) Fire(entry *logrus.Entry) error {
 	var key sarama.Encoder
 
@@ -83,11 +85,11 @@ func (h *Hook) Fire(entry *logrus.Entry) error {
 
 	msg, err := h.formatter.Format(entry)
 	if err != nil {
-		return err
+		return fmt.Errorf("%w", err)
 	}
 
 	if h.producer == nil {
-		return errors.New("no producer defined")
+		return ErrNoProducer
 	}
 
 	h.producer.Input() <- &sarama.ProducerMessage{

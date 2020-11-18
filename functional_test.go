@@ -37,6 +37,7 @@ func (trm *testReporterMock) Errorf(format string, args ...interface{}) {
 
 func makeProducer(er mocks.ErrorReporter, vc ...mocks.ValueChecker) sarama.AsyncProducer {
 	c := mocks.NewAsyncProducer(er, nil)
+
 	for _, check := range vc {
 		if check != nil {
 			c.ExpectInputWithCheckerFunctionAndSucceed(check)
@@ -44,6 +45,7 @@ func makeProducer(er mocks.ErrorReporter, vc ...mocks.ValueChecker) sarama.Async
 			c.ExpectInputAndSucceed()
 		}
 	}
+
 	return c
 }
 
@@ -52,6 +54,7 @@ func makeValueChecker(val []byte) mocks.ValueChecker {
 		if string(val) != string(v) {
 			return fmt.Errorf("Expected: %s, got: %s", string(val), string(v))
 		}
+
 		return nil
 	}
 }

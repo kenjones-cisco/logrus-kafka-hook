@@ -1,5 +1,0 @@
-package: github.com/kenjones-cisco/logrus-kafka-hook
-import:
-- package: github.com/sirupsen/logrus
-  version: ^1.0.3
-- package: github.com/Shopify/sarama

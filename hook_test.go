@@ -12,9 +12,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var (
-	mockData = []byte("test_data")
-)
+var mockData = []byte("test_data")
 
 type testReporterMock struct {
 	errors []string
@@ -31,12 +29,14 @@ func (trm *testReporterMock) Errorf(format string, args ...interface{}) {
 func makeProducer(er mocks.ErrorReporter, vc mocks.ValueChecker) sarama.AsyncProducer {
 	c := mocks.NewAsyncProducer(er, nil)
 	c.ExpectInputWithCheckerFunctionAndSucceed(vc)
+
 	return c
 }
 
 func makeErrorProducer(er mocks.ErrorReporter, vc mocks.ValueChecker, err error) sarama.AsyncProducer {
 	c := mocks.NewAsyncProducer(er, nil)
 	c.ExpectInputWithCheckerFunctionAndFail(vc, err)
+
 	return c
 }
 
@@ -45,6 +45,7 @@ func makeValueChecker(val []byte) mocks.ValueChecker {
 		if string(val) != string(v) {
 			return fmt.Errorf("Expected: %s, got: %s", string(val), string(v))
 		}
+
 		return nil
 	}
 }
@@ -82,7 +83,6 @@ func TestFire(t *testing.T) {
 	if len(trm.errors) != 0 {
 		t.Errorf("Expected no errors got: %v", trm.errors)
 	}
-
 }
 
 func TestFire_NoProducer(t *testing.T) {

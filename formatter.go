@@ -1,10 +1,15 @@
 package logkafka
 
 import (
+	"fmt"
 	"sync"
 
 	"github.com/sirupsen/logrus"
 )
+
+// RFC3339NanoFixed is time.RFC3339Nano with nanoseconds padded using zeros to
+// ensure the formatted time is always the same number of characters.
+const RFC3339NanoFixed = "2006-01-02T15:04:05.000000000Z07:00"
 
 // Using a pool to re-use of old entries when formatting messages.
 // It is used in the Fire function.
@@ -22,12 +27,15 @@ func copyEntry(e *logrus.Entry, fields logrus.Fields) *logrus.Entry {
 	ne.Level = e.Level
 	ne.Time = e.Time
 	ne.Data = logrus.Fields{}
+
 	for k, v := range fields {
 		ne.Data[k] = v
 	}
+
 	for k, v := range e.Data {
 		ne.Data[k] = v
 	}
+
 	return ne
 }
 
@@ -70,8 +78,11 @@ func DefaultFormatter(fields logrus.Fields) logrus.Formatter {
 	}
 
 	return StructuredFormatter{
-		Formatter: &logrus.JSONFormatter{FieldMap: logFieldMap},
-		Fields:    fields,
+		Formatter: &logrus.JSONFormatter{
+			TimestampFormat: RFC3339NanoFixed,
+			FieldMap:        logFieldMap,
+		},
+		Fields: fields,
 	}
 }
 
@@ -81,7 +92,13 @@ func DefaultFormatter(fields logrus.Fields) logrus.Formatter {
 //
 func (f StructuredFormatter) Format(e *logrus.Entry) ([]byte, error) {
 	ne := copyEntry(e, f.Fields)
+
 	dataBytes, err := f.Formatter.Format(ne)
+	if err != nil {
+		err = fmt.Errorf("%w", err)
+	}
+
 	releaseEntry(ne)
+
 	return dataBytes, err
 }

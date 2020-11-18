@@ -108,6 +108,7 @@ _testmain.go
 cover/
 vendor/
 Godeps/_workspace/
+.mod/
 *.tar.gz
 *.xml
 *.txt
