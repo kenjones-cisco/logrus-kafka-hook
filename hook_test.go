@@ -1,14 +1,15 @@
 package logkafka
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"reflect"
 	"testing"
 	"time"
 
-	"github.com/Shopify/sarama"
-	"github.com/Shopify/sarama/mocks"
+	"github.com/IBM/sarama"
+	"github.com/IBM/sarama/mocks"
 	"github.com/sirupsen/logrus"
 )
 
@@ -42,7 +43,7 @@ func makeErrorProducer(er mocks.ErrorReporter, vc mocks.ValueChecker, err error)
 
 func makeValueChecker(val []byte) mocks.ValueChecker {
 	return func(v []byte) error {
-		if string(val) != string(v) {
+		if !bytes.Equal(val, v) {
 			return fmt.Errorf("Expected: %s, got: %s", string(val), string(v))
 		}
 

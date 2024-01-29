@@ -1,7 +1,7 @@
 package logkafka_test
 
 import (
-	"github.com/Shopify/sarama"
+	"github.com/IBM/sarama"
 	"github.com/sirupsen/logrus"
 
 	logkafka "github.com/kenjones-cisco/logrus-kafka-hook"

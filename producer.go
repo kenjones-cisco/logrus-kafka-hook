@@ -5,7 +5,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/Shopify/sarama"
+	"github.com/IBM/sarama"
 )
 
 const flushFrequency = 500 * time.Millisecond

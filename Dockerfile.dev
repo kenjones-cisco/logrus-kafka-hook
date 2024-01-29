@@ -1,9 +1,9 @@
-FROM golang:1.15
+FROM golang:1.18
 
-RUN go get golang.org/x/tools/cmd/goimports \
-    && go get github.com/axw/gocov/gocov \
-    && go get github.com/t-yuki/gocov-xml \
-    && go get github.com/tebeka/go2xunit \
-    && wget -O - -q https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b /usr/local/bin
+RUN go install golang.org/x/tools/cmd/goimports@latest \
+    && go install github.com/axw/gocov/gocov@latest \
+    && go install github.com/AlekSi/gocov-xml@latest \
+    && go install github.com/tebeka/go2xunit@latest \
+    && wget -O - -q https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b /usr/local/bin v1.46.2
 
 ENV CGO_ENABLED 0

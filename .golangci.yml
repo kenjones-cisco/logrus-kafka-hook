@@ -110,10 +110,13 @@ linters-settings:
     lines: 60
     statements: 40
   gci:
-    # put imports beginning with prefix after 3rd-party packages;
-    # only support one prefix
-    # if not set, use goimports.local-prefixes
-    local-prefixes: github.com/kenjones-cisco/logrus-kafka-hook
+    # Section configuration to compare against.
+    # Section names are case-insensitive and may contain parameters in ().
+    # Default: ["standard", "default"]
+    sections:
+      - standard                                  # Captures all standard packages if they do not match another section.
+      - default                                   # Contains all imports that could not be matched to another section type.
+      - prefix(github.com/kenjones-cisco/logrus-kafka-hook) # Groups all imports with the specified Prefix.
   gocognit:
     # minimal code complexity to report, 30 by default (but we recommend 10-20)
     min-complexity: 10
@@ -194,9 +197,6 @@ linters-settings:
     # put imports beginning with prefix after 3rd-party packages;
     # it's a comma-separated list of prefixes
     local-prefixes: github.com/kenjones-cisco/logrus-kafka-hook
-  golint:
-    # minimal confidence for issues, default is 0.8
-    min-confidence: 0.8
   gomnd:
     settings:
       mnd:
@@ -244,9 +244,6 @@ linters-settings:
     line-length: 200
     # tab width in spaces. Default to 1.
     tab-width: 4
-  maligned:
-    # print struct with more effective memory layout or not, false by default
-    suggest-new: true
   misspell:
     # Correct spellings using locale preferences for US or UK.
     # Default is to use a neutral variety of English.
@@ -328,8 +325,20 @@ linters:
   #   - govet
   enable-all: true
   disable:
-    - exhaustivestruct
+    - exhaustruct
     - gochecknoglobals
+    - ireturn
+    - varnamelen
+    - wrapcheck
+    - deadcode         # Deprecated: owner abandoned linter. Replaced by unused.
+    - exhaustivestruct # Deprecated: owner abandoned linter. Replaced by exhaustruct.
+    - golint           # Deprecated: owner archived repo.    Replaced by revive and/or staticcheck.
+    - ifshort          # Deprecated: owner deprecated repo.  No replacement.
+    - interfacer       # Deprecated: owner archived repo.    No replacement.
+    - maligned         # Deprecated: owner archived repo.    Replaced by govet 'fieldalignment'.
+    - scopelint        # Deprecated: owner deprecated repo.  Replaced by exportloopref.
+    - structcheck      # Deprecated: owner abandoned linter. Replaced by unused.
+    - varcheck         # Deprecated: owner abandoned linter. Replaced by unused.
   # disable-all: false
   # presets:
   #   - bugs
@@ -351,6 +360,7 @@ issues:
     - path: _test\.go
       linters:
         - goerr113
+        - paralleltest
         - testpackage
 
     - path: producer_test.go

@@ -22,7 +22,7 @@ var entryPool = sync.Pool{
 // copyEntry copies the entry `e` to a new entry and then adds all the fields in `fields` that are missing in the new entry data.
 // It uses `entryPool` to re-use allocated entries.
 func copyEntry(e *logrus.Entry, fields logrus.Fields) *logrus.Entry {
-	ne := entryPool.Get().(*logrus.Entry)
+	ne, _ := entryPool.Get().(*logrus.Entry)
 	ne.Message = e.Message
 	ne.Level = e.Level
 	ne.Time = e.Time

@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Shopify/sarama"
-	"github.com/Shopify/sarama/mocks"
+	"github.com/IBM/sarama"
+	"github.com/IBM/sarama/mocks"
 	"github.com/sirupsen/logrus"
 
 	logkafka "github.com/kenjones-cisco/logrus-kafka-hook"
@@ -51,7 +51,7 @@ func makeProducer(er mocks.ErrorReporter, vc ...mocks.ValueChecker) sarama.Async
 
 func makeValueChecker(val []byte) mocks.ValueChecker {
 	return func(v []byte) error {
-		if string(val) != string(v) {
+		if !bytes.Equal(val, v) {
 			return fmt.Errorf("Expected: %s, got: %s", string(val), string(v))
 		}
 

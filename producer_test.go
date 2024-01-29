@@ -3,7 +3,7 @@ package logkafka
 import (
 	"crypto/tls"
 	"crypto/x509"
-	"io/ioutil"
+	"os"
 	"testing"
 )
 
@@ -14,12 +14,14 @@ const (
 )
 
 func makeTLSConfiguration(t *testing.T) *tls.Config {
+	t.Helper()
+
 	cert, err := tls.LoadX509KeyPair(certFile, keyFile)
 	if err != nil {
 		t.Fatalf("makeTLSConfiguration failed %v", err)
 	}
 
-	caCert, err := ioutil.ReadFile(caFile)
+	caCert, err := os.ReadFile(caFile)
 	if err != nil {
 		t.Fatalf("makeTLSConfiguration failed %v", err)
 	}

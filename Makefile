@@ -9,7 +9,7 @@ export IMPORT_PATH = github.com/kenjones-cisco/logrus-kafka-hook
 # Windows environment?
 CYG_CHECK := $(shell hash cygpath 2>/dev/null && echo 1)
 # WSL environment?
-WSL_CHECK := $(shell grep -qE "(Microsoft|WSL)" /proc/version 2>/dev/null && echo 1)
+WSL_CHECK := $(shell grep -qE "Microsoft" /proc/version 2>/dev/null && echo 1)
 ifeq ($(CYG_CHECK),1)
 	VBOX_CHECK := $(shell hash VBoxManage 2>/dev/null && echo 1)
 

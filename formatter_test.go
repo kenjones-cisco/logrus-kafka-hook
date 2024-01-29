@@ -59,7 +59,7 @@ func TestDefaultFormatterWithEmptyFields(t *testing.T) {
 		"\"Key1\":\"Value1\"",
 		"\"@version\":\"1\"",
 		"\"type\":\"log\"",
-		fmt.Sprintf("\"@timestamp\":\"%s\"", now.Format(RFC3339NanoFixed)),
+		fmt.Sprintf("\"@timestamp\":%q", now.Format(RFC3339NanoFixed)),
 	}
 
 	for _, exp := range expected {
